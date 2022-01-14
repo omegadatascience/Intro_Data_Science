@@ -1,0 +1,1212 @@
+---
+title: 'Módulo 2'
+
+output:
+  html_document:                    
+    toc: true                       
+    #toc_depth: 3                    
+    #toc_float:                      
+    #  collapsed: true
+    # smooth_scroll: true
+    number_sections: true           
+    #theme: flatly
+    #spacelab
+    #default,cerulean,journal,flatly,readable,spacelab,
+    #united,cosmo,lumen,paper,sandstone,simplex,yeti
+    
+    #highlight: espresso
+    #default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    #css: styles.css                
+    #fig_width: 7                    
+    #fig_height: 6                   
+    #fig_caption: true               
+    #fig_align: 'center'
+    #code_folding: hide              
+#    keep_md: true     
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+# Conhecendo o R
+
+O R é uma linguagem de programação livre e de código aberto, isso significa que qualquer um pode instalar o R e ainda acessar todo o seu código fonte. Em termos práticos, o R é um ambiente de software para computação estatística e gráficos. Trata-se de uma ferramenta originalmente muito utilizada por estatísticos mundo afora mas que, com a popularização de áreas multidisciplinares, como a ciência de dados, vem ganhando espaço nas mais variadas áreas em que se fazem necessárias técnicas de análise de dados, como por exemplo: universidades, escolas, institutos de pesquisa, órgãos governamentais, startups, empresas, etc.
+
+A instalação do R pode ser feita pelo ["Comprehensive R Archive Network"](https://cran.r-project.org/) (CRAN). Na página você encontrará as distribuições R para diferentes sistemas operacionais: Linux (Debian, Fedora/Redhat, Ubuntu), macOS e Windows. Ainda na página do CRAN você pode acessar a útil lista de pacotes agrupados por tarefas/áreas, é o chamado [CRAN Task Views](https://cran.r-project.org/web/views/).
+
+O R possui recursos para visualização de dados, construção de dashboards utilizando o mecanismo Shiny, confecção de documentos dinâmicos utilizando Rmarkdown, etc. Isto sem mencionar a maior área de competência do R: os métodos estatísticos. Com o R é possível ajustar modelos estatísticos e de aprendizado de máquina, utilizar procedimentos de simulação Monte Carlo (reamostragens e afins), você tem acesso a implementações métodos multivariados, métodos não paramétricos, etc.
+
+Lembre-se do R como uma poderosa ferramenta que pode ser usada em várias etapas do processo do trabalho com dados como aquisição, importação, tratamentos dos dados, análise e comunicação. A documentação é vasta tanto internamente quanto materiais na web, alguns que materiais interessantes são os seguintes cartões de referência: [R Reference Card](https://cran.r-project.org/doc/contrib/Baggott-refcard-v2.pdf), [R Reference Card · Statistics](http://www.u.arizona.edu/~kuchi/Courses/MAT167/Files/R-refcard.pdf), [R base](http://github.com/rstudio/cheatsheets/raw/master/base-r.pdf), [R base · PT](https://raw.githubusercontent.com/rstudio/cheatsheets/master/translations/portuguese/base-r-cheatsheet-pt-BRA.pdf), [RStudio IDE](https://raw.githubusercontent.com/rstudio/cheatsheets/master/rstudio-ide.pdf), [RStudio IDE · PT](https://raw.githubusercontent.com/rstudio/cheatsheets/master/translations/portuguese/rstudio-IDE-cheatsheet-portuguese.pdf)
+
+---
+
+# Configuração do ambiente de trabalho
+
+Instalar a linguagem R costuma ser uma tarefa simples. Na página do [CRAN](https://cran.r-project.org/) estão disponíveis as opções de download. Para o sistema operacional Windows basta baixar o *.exe e instalar como qualquer outro software do sistema. Para Linux esteja atento à sua distribuição, utilize as instruções disponíveis [aqui](https://cran.r-project.org/bin/linux/); em geral basta copiar e colar alguns comandos no terminal e a instalação será feita sem maiores problemas. Para o sistema Mac OS X, recomendamos o tutorial disponível  [aqui](https://medium.com/@GalarnykMichael/install-r-and-rstudio-on-mac-e911606ce4f4).
+
+O R é uma linguagem de programação, isso quer dizer que o R é o responsável por receber as instruções do usuário e utilizar o computador para executar essas instruções e retornar um resultado. Na prática é comum o uso de softwares que oferecem algumas facilidades para se programar em determinada linguagem, esses softwares são chamados de ambientes integrados de desenvolvimento (IDE). Existem também os Editores; tratam-se de ferramentas gerais habilitadas para as linguagens usando plugins. Entre IDEs e editores, as mais famosas opções para trabalhar com R são o Rstudio, Tinn-R, GNU Emacs, Vim e VS Code.
+
+A mais popular das opções de IDE é o Rstudio. Sua popularidade deve-se ao fato de ser o mais rápido de se aprender. Além disso, a IDE já vem totalmente habilitada para o uso do R em todos os aspectos. O Download do RStudio (recomendado) pode ser feito pelo site [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/). 
+
+A escolha da IDE ou editor é pessoal. Em geral, IDEs são recomendadas para iniciantes pois já vem prontas para utilizar, têm uma curva de aprendizado fácil, as funcionalidades ficam todas disponíveis de forma intuitiva, etc. Contudo, IDEs tem poucas opções de customização e costumam ser limitadas à linguagem. Por outro lado, os editores costumam ser recomendados para usuários mais experientes. Com os editores é possível trabalhar com outras linguagens e existe um alto nível de customização. Contudo requer uma série de habilitações para que seja possível utilizar a linguagem e nem sempre os recursos são tão intuitivos quanto nas IDEs.
+
+---
+
+# Primeiros passos com R
+
+## Instruções na linguagem R
+
+O R é uma linguagem de programação, e portanto trabalha com a ideia de interface de linha de comando. Isso significa que você deve escrever para a linguagem o que quer que ela passe para o computador executar. Em termos de modo de uso temos duas opções: REPL e Batch.
+
+No modo REPL há um script com instruções, estas instruções são avaliadas no console (interpretador), ao longo da execução um analista supervisiona o processo e salva/duplica/modifica o script conforme necessidade. Já no modo Batch o script executa ser supervisão, esta ideia é usada em ambientes de produção ou simulação computacional.
+
+Algo importante que devemos deixar claro já no começo de nossos estudos é a diferença entre uma instrução e um comentário. Em R, tudo que vem após `#` é considerado como um comentário e não será avaliado. O objetivo dos comentários é a documentação do código. Uma recomendação geral é documentar os trechos do código da melhor forma possível, para isso faça comentários relevantes sobre o funcionamento do seu script, evite comentários óbvios e ambíguos.
+
+Já uma instrução é o que será avaliado pela linguagem de programação. Instruções podem ocupar uma única ou várias linhas, além disso uma linha pode ter várias instruções. Algumas recomendações gerais ao lidar com instruções são evitar ultrapassar 72 ou 80 caracteres, manter o código devidamente indentado e evitar muitas instruções em uma única linha.
+
+Vejamos alguns exemplos de instruções devidamente documentadas por meio de comentários no R.
+
+```{r}
+# Faz uma soma.
+2 + 2
+
+
+# Índice de massa corporal.
+83/1.85^2
+
+# Quantos segundos tem um dia?
+24 * 60 * 60
+
+# Uma soma em uma única linha.
+2 + 2 + 7 + 5
+
+# A mesma soma em várias linhas.
+2 +
+  2 +
+  7 +
+  5
+
+# Mais de uma instrução em uma linha.
+2 + 2; 7 + 5
+```
+
+## Área de trabalho
+
+Praticamente tudo que criamos em R é um objeto. Estes objetos são criados na área de trabalho quando fazemos atribuições, para isso usa-se o símbolo `<-`. A ideia dos objetos é evitar ter que reescrever uma mesma informação diversas vezes, além disso os objetos podem ser reusados para criar novos objetos, podem também ser sobrescritos e, logicamente, apagados quando não houver mais necessidade de usá-los.
+
+```{r}
+# Criando um objeto que armazena o peso (kg).
+peso <- 83
+
+# Criando um objeto que armazena a altura.
+altura <- 1.18 # Minha altura (m)
+
+# Criando um objeto que armazena o imc.
+imc <- peso/altura^2
+imc
+
+# Lista objetos na área de trabalho.
+ls()
+
+# Apaga objetos.
+rm(peso, altura)
+ls()
+
+```
+
+O comando `ls()` mostra o conteúdo do `.GlobalEnv`, ou seja, a nossa área de trabalho. Contudo existem objetos em outros ambientes ou espaços, como por exemplo os pacotes. Quando o R busca um objeto e não o encontra no `.GlobalEnv` , ele vai para o próximo espaço de trabalho. Utilizando a função `search()` podemos obter a lista de espaços de trabalho. Por exemplo, no R existe um objeto chamado `woman` que você nunca declarou. Vamos descobrir de onde ele veio
+
+```{r, eval=FALSE}
+women
+# Mas `woman` não está no ``.GlobalEnv``.
+# De onde veio?
+
+# Mostra o `.GlobalEnv`.
+ls()
+
+# Mostra os demais espaços.
+search()
+
+# Lista o conteúdo de um espaço.
+ls("package:datasets")
+```
+
+Mas o que acontece se sobrescrevermos o objeto?
+
+```{r, eval=FALSE}
+# O que acontece se eu fizer?
+women <- c("Gertrude Mary Cox",
+           "Florence Nightingale David")
+
+women
+
+# Está no `.GlobalEnv`.
+datasets::women # Está no pacote.
+```
+
+## Acesso à documentação do R
+
+Uma das melhores partes de se trabalhar com R é a documentação, você pode aprender R sem sair do R. Em geral, tudo em R é muito bem documentado e a documentação do R consiste de arquivos que explicam objetos e funções, isto sem mencionar os tutoriais (chamados de vinhetas ou vignettes). Além disso, existem funções específicas para a consulta destes materiais. E fora do R existe uma infinidade de materiais disponíveis na web.
+
+```{r, eval=FALSE}
+#Duas formas iguais de chamar
+# a documentação.
+?iris
+help(iris)
+
+# Procura por ocorrências de `women`.
+help.search("iris")
+
+# Objetos que batem com o termo.
+apropos("tukey")
+
+# Exibe as vinhetas de um pacote.
+browseVignettes(package = "survival")
+
+# Procura pelo termo no
+# r-project.org.
+RSiteSearch("spider plot")
+```
+
+Ao acessar a documentação de uma função disponível em um pacote, você terá os seguintes elementos:
+
+- Cabeçalho: indica o pacote. 
+- Título: título da função.
+- Description: descrição do que o objeto é/faz.
+- Usage: como usar ou fazer a chamada.
+- Arguments: quais os argumentos formais da função.
+- Value: o que a função retorna.
+- Details: detalhes adicionais de implementação.
+- Note: notas adicionais sobre uso e afins.
+- See Also: referências para documentação relacionada.
+- References: referências bibliográficas.
+- Authors: autores da função.
+- Examples: exemplos de uso.
+
+Para auxiliá-lo nos trabalhos tenha sempre em mãos as seguintes funções, é praticamente um kit de sobrevivência no R. Aprenda a usá-lo e tudo será mais fácil:
+
+1. `ls()`
+2. `apropos()`
+3. `help()`
+4. `help.search()`
+5. `help.start()`
+6. `RSiteSearch()`
+7. `example()`
+8. `demo()`
+9. `browseVignettes()`
+10. `vignette()`
+11. `str()`
+12. `args()`
+13. `class()`
+14. `methods()`
+15. `find()`
+
+## Arquivos da linguagem R
+
+Existem arquivos relacionados à linguagem R que servem para melhorar a experiência do usuário como o `.Rhistory`, `.RData`, `.Rproj` e `.Rprofile`. O `.Rhistory` é um arquivo que contém as instruções enviadas pro console. O `.RData` é um arquivo binário que salva sua área de trabalho; ele serve basicamente para restaurar toda área de trabalho e é bastante útil quando o processamento é demorado. O `.Rproj` é um arquivo que define configurações do projeto (para RStudio apenas), são salvos no diretório de trabalho. Por fim, o `.Rprofile` é um arquivo de configurações lido no início das seções; serve para carregar pacotes muito usados, configurar opções e também é possível configurar mensagens de boas-vindas e diagnóstico do sistema.
+
+Outro elemento importante é o diretório de trabalho. Trata-se do local no sistema operacional para onde o R está apontando. Isto é, de onde ele lê e escreve arquivos por padrão. Você pode definir por comandos (recomendável) ou usando RStudio IDE > Session > Setting Working Directory.
+
+```{r, eval=FALSE}
+# Mostra o atual diretório de trabalho.
+getwd()
+
+# Troca por outro endereço.
+setwd("~/Downloads")
+
+# Lista o conteúdo do diretório de trabalho.
+dir()
+```
+
+## Pacotes
+
+Pacotes são coleções de funções e conjuntos de dados organizados e documentados. Um pacote contém código R e eventualmente códigos de outras linguagens e podem depender de libs do sistema
+operacional. A instalação de pacotes pode ser feita de diversas formas, eles podem ser instalados de repositórios como o CRAN, Bioconductor, MRAN, etc; outra possibilidade é a instalação por meio de arquivos de instalação *.tar.gz ou ainda de repositórios Git: GitHub, GitLab, etc.
+
+```{r, eval=FALSE}
+# Para instalar um pacote do repositório.
+install.packages("tidyverse")
+
+# Para carregar o pacote e usá-lo.
+library(tidyverse)
+
+# Para ver o conteúdo dele.
+ls("package:tidyverse")
+
+# Documentação do pacote.
+help(package = "tidyverse")
+
+# Para ver onde foi instalado.
+system.file(package = "tidyverse")
+
+# Os caminhos para endereços de instalação.
+.libPaths()
+
+# Para remover o pacote da sessão.
+detach("package:tidyverse", unload = TRUE)
+
+# Funções relacionadas a pacotes.
+apropos("package")
+```
+
+---
+
+# Aritmética básica com R
+
+O R pode ser usado como uma poderosa calculadora científica para resolver problemas com operações básicas, trigonométricas, estatísticas, etc. Vejamos alguns exemplos:
+
+## Operações básicas
+
+```{r}
+2 + 3 # Soma.
+2 - 3 # Subtração
+2 * 3 # Multiplicação
+2/3 # Divisão
+2^3 # Potenciação.
+2^(1/3) # Radiciação.
+10 %% 3 # Resto.
+10 %/% 3 # Parte inteira.
+```
+
+## Logarítmo
+
+```{r}
+exp(2) # Exponencial neperiano.
+log(10) # Neperiano.
+log10(10) # Base 10.
+log2(10) # Base 2.
+log(10, base = 5) # Base qualquer.
+```
+
+## Trigonométricas
+
+```{r}
+sin(3) # Seno.
+cos(3) # Cosseno.
+tan(3) # Tangente.
+asin(0.5) # Arco seno.
+acos(0.5) # Arco cosseno.
+atan(0.5) # Arco tangente.
+```
+
+## Estatísticas
+
+```{r}
+y <- c(1.85, 1.78, 1.81, 1.69, 1.71)
+mean(y)
+# Média.
+median(y) # Mediana.
+sd(y)
+# Desvio-padrão amostral.
+var(y)
+# Variância amostral.
+max(y)
+# Máximo.
+min(y)
+# Mínimo.
+length(y) # Número de valores.
+```
+
+## Operadores lógicos
+
+```{r}
+x <- 3
+y <- 4
+
+2 == 2 # Igualdade.
+2 != 2 # Desigualdade.
+x <= y # Outros operadores:
+# "<", ">", and ">=".
+
+(2 < 5) & (7 >= 3) # Operador AND.
+(2 < 5) | (7 >= 3) # Operador OR.
+!(2 < 5) # Operador NOT.
+
+"a" == "b" # Compara strings.
+"a" < "b" # Ordem alfanumérica.
+"1" < "a"
+```
+
+## Tipos especiais
+
+Devemos estar atentos aos tipos especiais de valores, são eles:
+
+- NA : para valores ausentes.
+- NULL : para objetos vazios.
+- Inf e -Inf : para infinitos.
+- NaN : para resultados não razoavelmente definidos.
+
+```{r}
+5 + NA # O resultado é NA.
+is.na(5 + NA) # Verifica se é NA.
+
+10 + NULL # Retorna objeto vazio.
+is.null(NULL) # Verifica se é nulo.
+
+5/0 # Infinito.
+is.finite(5/0) # Verifica se é finito.
+
+0/0 # Valor indeterminado.
+is.nan(0/0) # Verifica se é not a number.
+
+```
+
+---
+
+# Manipulando vetores de dados
+
+Um vetor é uma estrutura que armazena vários valores em que o tipo de valor é homogêneo, isto é, todos os elementos são do mesmo tipo de valor. A forma mais simples de criar um vetor no R é por meio do operador de concatenação `c()`.
+
+```{r}
+v1 <- c(1, 5, 11, 33) # Numérico.
+v2 <- c("hello", "world") # De caracteres.
+v3 <- c(TRUE, TRUE, FALSE) # Lógico.
+
+# ATTENTION: Coerção para o tipo mais geral.
+v4 <- c(v1, v2, v3, "boo")
+```
+
+## Regra da reciclagem
+
+Na manipulação de vetores devemos estar atentos à regra da reciclagem. Devido a essa regra vetores menores são reciclados até ter tamanho
+do maior para que seja possível fazer as operações vetoriais.
+
+```{r}
+v1 <- c(2, 4, 6, 8, 10)
+v2 <- c(1, 3)
+
+length(v1)
+length(v2)
+
+# Operações entre vetores.
+v1 * 10 # Vetor-escalar.
+v1/2# Vetor-escalar.
+v1 + v2 # Vetor-vetor.
+```
+
+## Tipos de valores e classes
+
+Outra característica que devemos estar atentos é quanto aos tipos básicos de valores presentes no R:
+
+- Lógico: TRUE, FALSE.
+- Inteiro: 0, 5, 10, 20, etc.
+- Numérico (aka double, float): 3.14, 10.22, etc.
+- Caractere (aka string): "Curitiba", "Campinas", etc.
+- Fator: "Casado", "Solteiro", etc.
+- Complexo: números complexos com parte imaginária.
+- Datas: yyyy-mm-aa.
+- Data tempo: yyyy-mm-aa hh:mm:ss.
+
+Por meio das funções que começam com `is.` podemos facilmente verificar os tipos de elementos no R. Já com as funções que começam com `as.` podemos fazer a conversão de objetos para outros tipos.
+
+```{r}
+# Funções que começam com `is.`.
+apropos("^is\\.")
+
+is.integer(1)
+is.numeric(1)
+
+is.integer(1L)
+is.numeric(1L)
+
+is.character("Curitiba")
+
+y <- factor(c("Solteiro", "Casado"))
+is.factor(y)
+is.character(y)
+
+is.logical(c(TRUE, FALSE))
+
+# Conversões de tipo.
+apropos("^as\\.")
+as.numeric("123")
+as.logical(c(0, 1))
+```
+
+## Classe e atributos
+
+Mais um aspecto importante no aprendizado de R é a lógica de classes e métodos. As funções genéricas do R são chamadas de métodos e atuam conforme a classe do objeto. 
+
+```{r}
+# Um vetor numérico.
+x <- c(1, 2, 3)
+class(x)
+methods(class = "numeric")
+
+# Numérico mas com valores nomeados.
+notas <- c("João" = 7.8,
+           "Bianca" = 10,
+           "Eduarda" = 8.5)
+
+class(notas)
+attributes(notas)
+names(notas)
+
+# Uma tabela.
+class(women)
+attributes(women)
+```
+
+## Sequências, repetições e números aleatórios
+
+Uma tarefa interessante que pode ser realizada no R e é bastante útil para o aprendizado diz respeito à geração de sequências, repetições e números aleatórios.
+
+```{r}
+# Sequências regulares.
+1:7
+seq(from = 1, to = 10, by = 2)
+seq(from = 1, to = 20, length.out = 7)
+seq(from = 1, by = 2, length.out = 7)
+
+# Repetições.
+rep(0, 5)
+rep(1:3, times = 2)
+rep(1:3, each = 2)
+
+# Amostras aleatórias.
+sample(1:20, size = 10,
+       replace = FALSE)
+sample(c("a", "b", "c"), size = 10,
+       replace = TRUE)
+
+# Números aleatórios.
+runif(n = 10, min = 0, max = 1)
+rnorm(n = 10, mean = 1.80, sd = 0.1)
+```
+
+## Seleção de elementos no vetor
+
+Podemos não só criar vetores em R como também selecionar seus elementos quando necessário, esta seleção pode ser feita por: 
+
+- Posição
+
+```{r}
+# Numérico mas com valores nomeados.
+notas <- c("João" = 7.8,
+           "Bianca" = 10,
+           "Eduarda" = 8.5,
+           "Felipe" = 7.0,
+           "Márcia" = 6.5)
+
+notas[1] # A posição 1.
+notas[5] # A posição 5.
+notas[1:2] # Um intervalo.
+notas[c(1, 3)] # Um conjunto.
+notas[-1] # Remove.
+```
+
+- Condicional
+
+```{r}
+mask <- notas > 7.0
+mask
+notas[mask]
+notas[notas > 9.0]
+```
+
+- Pelo nome.
+
+```{r}
+# Seleciona valores pelo nome associado.
+notas["João"]
+notas[c("Márcia", "Eduarda")]
+```
+
+## Seleção e modificação
+
+Uma vez que valores podem ser selecionados, o conteúdo pode ser também modificado.
+
+```{r}
+# Atribui nota para um aluno.
+notas["João"] <- 0
+notas
+
+# Atribui nota "desconhecida" para aluno.
+notas["Felipe"] <- NA
+notas
+
+# Remove elemento do vetor.
+notas <- notas[-4]
+notas
+```
+
+O vetor pode também ser incrementado ou concatenado com outros.
+
+```{r}
+append(notas, value = c("Carlos" = 9.0))
+append(notas, value = c("Simone" = 7.2),
+       after = 0)
+
+novas_notas <- c(notas,
+                 c("Pedro" = 8.0,
+                   "Luana" = 8.3))
+
+novas_notas
+```
+
+---
+
+# Conhecendo o Tidyverse
+
+Manipular e visualizar dados são atividades obrigatórias em Data
+Science. A manipulação determina o sucesso de uma série de etapas como o entendimento dos dados, limpeza e conciliação de dados, engenharia de características, especificação de modelos, comunicação de resultados, etc. Fazer manipulação de forma eficiente requer conhecer o processo e suas etapas, além de dominar a tecnologia para execução. Neste sentido, linguagens de programação oferecem uma série de vantagens por permitirem um processo reproduzível, extensível, escalonável, integrável, portável, etc.
+
+O framework do {tidyverse} é uma coleção de 8 pacotes R construídos para trabalhar em conjunto que oferecem uma reimplementação e extensão das funcionalidades para manipulação e visualização. Estes pacotes possuem gramática, organização, filosofia e estruturas de dados mais clara e por esse motivo é mais fácil desenvolver código. Além disso existem outros pacotes que acoplam muito bem com o {tidyverse}. Mais informações sobre os pacotes podem ser vistas na página oficial do [Tidyverse](https://www.tidyverse.org/packages/). Outras boas referências são o website do livro [R for Data Science](https://r4ds.had.co.nz/) e o livro [The Tidyverse Cookbook](https://rstudio-education.github.io/tidyverse-cookbook/).
+
+Os 8 pacotes que compõem o {tidyverse} são: {tibble}, {readr}, {tidyr}, {dplyr}, {ggplot2}, {purrr}, {forcats} e {stringr}. Além deles, pacotes como {lubridate}, {hms} e {magrittr} adicionam algumas funcionalidades interessantes ao ecossistema. Para instalar o {tidyverse} é simples, basta utilizar a função `install.packages` e todos os 8 pacotes serão automaticamente baixados:
+
+```{r, eval=FALSE}
+# Do CRAN.
+install.packages("tidyverse")
+
+# Do GitHub.
+# install.packages("devtools")
+devtools::install_github("hadley/tidyverse")
+
+# Atualizar caso já tenha instalado.
+tidyverse_update()
+```
+
+Vejamos para quais tarefas cada um dos pacotes é indicado.
+
+## {tibble}
+
+O `data.frame` é a estrutura nativa (primitiva) para representar tabelas de dados. O `tibble` nada mais é do que uma reimplementação da estrutura com melhorias como um método print mais enxuto e informativo, mais consistência para seleção e modificação de conteúdo, maior facilidade na conversão de outros formatos para `tibble`, maior liberdade pois colunas/cédulas podem representar objetos mais complexos, etc. Para documentação acesse:
+
+- https://tibble.tidyverse.org/.
+- https://r4ds.had.co.nz/tibbles.html.
+
+## {readr}
+
+O `readr` é o pacote tidyverse que tem recursos para importação de dados retangulares na forma de texto pleno. As implementações são cerca de 10x mais rápidas que as do R básico e 1.2-2x mais lento que o pacote `data.table`. Com o `readr` é possível realizar tarefas de leitura/escrita de dados tabulares em formatos como csv, tsv, fwf. As funções de importação tem o prefixo `read_`, já as funções de escrita contam com o prefixo `write_` e funções de parsing sempre iniciam com `parse_`. Algo bastante útil e interessante são os recursos "inteligentes" para definir os tipos das variáveis já no processo de leitura. Para documentação acesse:
+
+- https://readr.tidyverse.org/.
+- https://r4ds.had.co.nz/data-import.html.
+
+## {tidyr}
+
+O `tidyr` fornece um suporte para criar dados no formato tidy (tabular). O formato tidy é aquele em que cada variável está em uma coluna, cada observação é uma linha e cada valor é uma cédula. Os principais recursos do `tidyr` dizem respeito a ferramentas para mudar a disposição dos dados (empilhar e desempilhar), lidar com valores ausentes, partir/concatenar variáveis, aninhar/desaninhar listas, etc. Para documentação acesse:
+
+- https://tidyr.tidyverse.org/.
+- https://r4ds.had.co.nz/tidy-data.html.
+
+## {dplyr}
+
+O `dplyr` é o pacote que dispõe de uma gramática para manipulação de dados. Tem um conjunto consistente de verbos para atuar sobre tabelas, como `mutate()`, `select()`, `filter()`, `arrange()`, `summarise()`, `slice()`, `rename()`, etc. Estes verbos podem ainda ser aliados com os sufixos: `_at()`, `_if()`, `_all()`, etc. Existem ainda ferramentas para extratificação (`group_by()` e `ungroup()`), junções (`inner_join()`, `full_join()`, `left_join()` e `right_join()`) e não podemos esquecer das operações de split-apply-combine. Para documentação acesse:
+
+- https://dplyr.tidyverse.org/.
+- https://r4ds.had.co.nz/relational-data.html.
+
+## {ggplot2}
+
+O `ggplot2` é o pacote indicado para criação de gráficos baseado na gramática dos gráficos. O pacote possui um claro mapeamento das variáveis do conjunto de dados em variáveis visuais e construção baseada em camadas. Para documentação acesse:
+
+- https://ggplot2.tidyverse.org/.
+- Wickham (2016): ggplot2 - Elegant Graphics for Data Analysis.
+- Teutonico (2015): ggplot2 Essentials.
+
+## {purrr}
+
+O `purrr` fornece um conjunto completo e consistente para programação funcional que são uma sofisticação da família apply. O objetivo das funções é percorrer vetores, listas, colunas, linhas, etc. Além disso, permitem filtrar, concatenar, parear listas, etc. Para documentação acesse: 
+
+- https://purrr.tidyverse.org/.
+
+## {forcats}
+
+O `forcats` serve para manipulação de variáveis categóricas/fatores. As principais operações são: renomear (manualmente ou programaticamente), reordenar (manualmente, por frequência, por alguma variável) e aglutinar: (combinar níveis menos frequentes, etc). Para documentação acesse:
+
+- https://forcats.tidyverse.org/.
+- https://peerj.com/preprints/3163/.
+
+## {stringr}
+
+O `stringr` oferece recursos coesos construídos para manipulação de
+strings. O pacote é construído sobre o pacote stringi e permite solução de problemas que envolvam aplicação de expressões regulares, como: detectar, contar, partir, extrair, substituir, etc. Para documentação acesse:
+
+- https://stringr.tidyverse.org/.
+
+## {lubridate}, {hms} e {magrittr}
+
+Os pacotes `lubridate`, `hms` e `magrittr` adicionam funcionalidades que complementam os 8 pacotes básicos do tidyverse. O `lubridate` e o `hms` possuem recursos para manipulação de dados date, time e date-time. Com as funcionalidades dos pacotes é fácil a decomposição de datas: dia, mês, semana, dia da semana, etc. Além de ser possível lidar com fusos horários, horários de verão, etc. 
+
+Já o `magrittr` é o pacote que disponibiliza o operador pipe, que permite expressar de forma mais direta as operações. Trata-se de uma ideia inspirada no Shell e usada em várias outras linguagens. A lógica é bem simples:
+
+- x %>% f é o mesmo que f(x).
+- x %>% f(y) é o mesmo que f(x, y).
+- x %>% f %>% g %>% h é o mesmo que h(g(f(x))).
+
+Existem também outros operadores pipe para situações específicas.
+
+---
+
+# Importação de dados com Readr
+
+O processo de análise de dados começa com a importação dos dados para o ambiente de manipulação, neste sentido existem várias formas para armazenar dados como por meio de arquivos de texto pleno (tsv, txt, csv, etc), planilhas eletrônicas, bancos de dados relacionais, etc. O `readr` é o pacote tidyverse que tem recursos para importação de dados retangulares na forma de texto pleno. Para ajuda acesse o [cartão de referência de importação de dados com o {readr}](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).
+
+## Funções para importação e exportação
+
+Todas as funções com prefixo `read_` referem-se às funções de importação. Já as funções de escrita sempre iniciam-se com `write_`.
+
+```{r, message=FALSE}
+library(tidyverse)
+
+ls("package:readr") %>%
+  str_subset("^read_")
+
+ls("package:readr") %>%
+  str_subset("^write_")
+
+```
+
+## As funções de parsing
+
+Uma das maiores vantagens do `readr` é a maior flexibilidade para determinar o tipo de valor dos campos. Para isso, as funções de parsing (exame) são usadas com o objetivo de atribuir o tipo de valor apropriado durante a importação. Em termos práticos isso se torna economia de tempo pois evita que, após a leitura, tenhamos que verificar o tipo de cada variável e converter para o tipo correto nos casos em que a leitura não foi feita de forma adequada.
+
+```{r}
+ls("package:readr") %>%
+  str_subset("^parse_")
+
+# Conversão para data e data-tempo.
+parse_date("2018/12/25")
+parse_datetime("20181225")
+parse_datetime("2018-12-25T12:10:00")
+
+# Número com separador de milhar.
+guess_parser("1,234,566")
+parse_guess("1,234,566")
+
+# Datas.
+guess_parser(c("2010-10-10"))
+parse_guess(c("2010-10-10"))
+```
+
+## Importação e exportação de dados com readr
+
+Na importação de dados com `readr` o argumento obrigatório é o caminho para o arquivo. Os demais argumentos são opcionais e existem para um controle detalhado das opções de importação. Além disso, as funções do readr produzem tibbles e não importam strings como fator, apenas por especificação. Para escrita de tabelas em disco a ideia é bastante similar, basta indicar o objeto e o caminho onde salvar.
+
+```{r, eval=FALSE}
+url <- "http://leg.ufpr.br/~walmes/data/anovareg.txt"
+
+# Default.
+tb <- read_tsv(file = url)
+
+# Tipo de valores para cada variável.
+tb <- read_tsv(file = url, col_types = "cicd")
+
+# Renomeia os campos.
+tb <- read_tsv(file = url, col_names = c("clt", "ntr", "blc", "index"))
+
+# Salvando tabela em disco.
+write_csv(iris, path = "iris_dataset.csv")
+
+```
+
+---
+
+# Arrumação de dados com Tidyr
+
+A maior parte das etapas de análise de dados assume que os dados estão arrumados, ou seja: cada coluna é uma variável/atributo/campo, cada linha é uma observação/caso/instância/tupla e cada cédula é o registro de uma variável de uma observação. Na prática existem diversas situações que fogem à regra como a disposição no formato longo ou amplo, colunas com valores concatenados/separados ou mesmo registros com valores ausentes. Para tratamento destes tipos de situação, o `tidyr` contém recursos para arrumação dos dados que permitem mudança de disposição dos dados, substituição de missings e separação/união de campos. Para ajuda acesse o [cartão de referência de importação de dados com o {tidyr}](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf). Vejamos as funções disponíveis do pacote.
+
+```{r}
+library(tidyverse)
+ls("package:tidyr")
+```
+
+## Empilhar/desempilhar variáveis
+
+Algo comum no tratamento de dados é a necessidade de empilhar variáveis. Esta situação é comum quando são feitas medidas ao longo do tempo ou quando temos dados de painel e/ou questionário.
+
+```{r}
+n <- 3
+
+tb1 <- tibble("trat" = LETTERS[1:n],
+              aval1 = rpois(n, 4),
+              aval2 = rpois(n, 4),
+              aval3 = rpois(n, 4))
+
+tb1
+
+tb2 <- tb1 %>%
+  pivot_longer(names_to = "aval",
+               values_to = "insetos",
+               cols = aval1:aval3)
+
+tb2
+
+```
+Desempilhar em função de uma variável é a operação inversa de empilhar, dados nessa disposição são menos comuns mas a tarefa é facilmente feita com o tidyr.
+
+```{r}
+tb2 %>%
+  pivot_wider(names_from = "aval",
+              values_from = "insetos")
+```
+
+## Separar/unir variáveis
+
+Já a tarefa de separar variáveis é muito comum quando um campo de texto é a união de várias informações como por exemplo datas, horas, endereços, etc.
+
+```{r}
+tb <- tibble(veiculo = c("Celta", "Gol", "Uno"),
+             ano_mod = c("2011/2012", "2012/2012", "2015/2016"),
+             local = c("Curitiba-PR", "Santos-SP", "Viçosa-MG"))
+
+tb
+
+tb %>%
+  separate(col = "ano_mod",
+           into = c("ano", "modelo"),
+           sep = "/",
+           convert = TRUE) %>%
+  separate(col = "local",
+           into = c("cidade", "estado"),
+           sep = "-")
+```
+
+De forma similar, pode ser necessário unir variáveis quando vários campos precisam ser combinados para gerar uma informação.
+
+```{r}
+tb <- tibble(dia = c(1, 5, 23, 16),
+             mes = c(3, 6, 2, 9),
+             ano = 2018)
+
+tb
+
+tb %>%
+  unite(col = "data", ano, mes, dia, sep = "-", remove = FALSE) %>%
+  mutate(data = parse_date(data, format = "%Y-%m-%d"))
+```
+
+## Manuseio de valores ausentes
+
+Por fim, podemos tratar dados ausentes.
+
+```{r}
+tb <- tibble(jogador = 1:5,
+             jogos = c(0, 1, 3, 1, 2),
+             gols = c(NA, 0, 0, 2, 1),
+             faltas = c(NA, 1, 1, 0, 0))
+
+tb
+
+tb %>%
+  drop_na()
+
+tb %>%
+  replace_na(list(gols = 0, faltas = 0))
+```
+
+---
+
+# Transformação de dados com Dplyr
+
+Depois dos dados arrumados, é a hora começar a conhecê-los, nesta etapa começa a fase de análise exploratória de dados. Os dados são explorados com diversos objetivos, alguns deles são conhecer as (propriedades das) variáveis, determinar medidas descritivas, comparar grupos, quantificar relações entre variáveis, extrair padrões, detectar ameaças e corrigir problemas, etc. A análise exploratória envolve inúmeras operações e é preciso conhecê-las e ser criativo para aplicar da melhor forma com o objetivo de extrair informações dos dados.
+
+O `dplyr` é a gramática para manipulação de dados que disponibiliza de um conjunto consistente de verbos para atuar sobre tabelas como: `mutate()`, `select()`, `filter()`, `arrange()`, `summarise()`, `slice()`, `rename()`, etc. Estes verbos podem ser associados aos sufixos: `_at()` , `_if()` , `_all()`, etc. Ainda existem opções de grupamento como `group_by()` e `ungroup()`. Junções também são possíveis com o uso as funções `inner_join()`, `full_join()`, `left_join()` e `right_join()`. Por fim, o conjunto de funções resumo são extremamente úteis para fazer uma boa análise exploratória: `n()`, `n_distinct()`, `first()`, `last()`, `nth()`, etc. Para ajuda acesse o [cartão de referência de transformação de dados com o {dplyr}](https://github.com/rstudio/cheatsheets/raw/master/data-
+transformation.pdf).
+
+Para avaliar as possibilidades, vamos considerar 3 conjuntos de dados.
+
+```{r}
+# Tabela com alunos do curso de
+# Matemática e de Estatística.
+df1 <- tibble(
+  matricula = c(256, 487, 965,
+                125, 458, 874, 963),
+  nome = c("João", "Vanessa", "Tiago",
+           "Luana", "Gisele", "Pedro",
+           "André"),
+  curso = c("Mat", "Mat", "Est", "Est",
+            "Est", "Mat", "Est"),
+  prova1 = c(80, 75, 95, 70, 45, 55, 30),
+  prova2 = c(90, 75, 80, 85, 50, 75, NA),
+  prova3 = c(80, 75, 75, 50, NA, 90, 30),
+  faltas = c(4, 4, 0, 8, 16, 0, 20))
+```
+
+```{r}
+# Tabela com alunos de Engenharia.
+df2 <- tibble(
+  matricula = c(505, 658, 713),
+  nome = c("Bia", "Carlos", "Cris"),
+  curso = c("Eng", "Eng", "Eng"),
+  prova1 = c(65, 75, 75),
+  prova2 = c(85, 80, 90),
+  faltas = c(0, 0, 2))
+```
+
+```{r}
+# Informações de cadastro dos alunos
+# em outra base de dados.
+df_extra <- tribble(
+  ~mat, ~nome, ~idade, ~bolsista,
+  256, 'João' , 18, "S",
+  965, 'Tiago' , 18, "N",
+  285, 'Tiago' , 22, "N",
+  125, 'Luana' , 21, "S",
+  874, 'Pedro' , 19, "N",
+  321, 'Mia', 18, "N",
+  669, 'Luana' , 19, "S",
+  967, 'André' , 20, "N",
+)
+```
+
+## Ordenação
+
+Podemos realizar operações de ordenação por uma ou mais variáveis.
+
+```{r}
+df1 %>%
+  arrange(matricula)
+
+df1 %>%
+  arrange(curso, desc(prova1))
+```
+
+## Seleção das variáveis
+A seleção pode ser feita pelos nomes, posições, por condição ou ainda fazendo uso de expressões regulares.
+
+```{r}
+df1 %>%
+  select(nome, prova1, prova2, prova3)
+
+df1 %>%
+  select(1:3)
+
+df1 %>%
+  select_if(is.numeric)
+
+df1 %>%
+  select(matches("^prova"))
+
+```
+
+## Filtros
+
+Também é possível filtrar o conjunto de dados usando uma, duas ou mais variáveis.
+
+```{r}
+df1 %>%
+  filter(curso == "Est")
+
+df1 %>%
+  filter(faltas == 0)
+
+df1 %>%
+  filter(faltas != 0)
+
+df1 %>%
+  filter(faltas %in% c("Aline", "Vanessa"))
+
+df1 %>%
+  select(curso, prova1:prova3) %>%
+  filter(curso == "Est",
+         (prova1 + prova2 + prova3) > 180)
+
+```
+
+## Transformações
+
+As operações de transformação consistem em operações que podem modificar a tabela com a criação de novas variáveis, remoção de variáveis e transformação de variáveis. As operações de criação/transformação podem ser matemáticas (aritméticas, potência, logarítmicas, trigonométricas, etc.), compartimentação (agrupar em classes), conversão de tipo de valor ou ainda de substituição (preencher um valor ausente).
+
+### Criação de variável
+
+```{r}
+df1 %>%
+  mutate(media = (prova1 + prova2 + prova3/3)) %>%
+  select(nome, curso, media)
+```
+
+### Transformações em várias variáveis
+
+```{r}
+df1 %>%
+  mutate_at(vars(prova1:prova3),
+            ~replace_na(., 0)) %>%
+  select(prova1:prova3)
+```
+
+### Transformações dado uma condição
+
+```{r}
+# Passa para caixa alta.
+df1 %>%
+  mutate_if(is.character, str_to_upper)
+
+df1 %>% mutate_if(is.numeric, sqrt)
+df1 %>% mutate_if(is.numeric, log)
+df1 %>% mutate_if(is.character, as.factor)
+df1 %>% mutate_if(is.numeric, as.integer)
+
+```
+
+### Transformações dado uma expressão regular
+
+```{r}
+# Divide a nota por 10.
+df1 %>%
+  mutate_at(vars(starts_with("prova")),
+            ~./10)
+```
+
+### Cortar valores em classe
+
+```{r}
+# Intervalos para corte e rótulos.
+inter <- c(-Inf, 40, 70, Inf)
+condi <- c("reprovado", "exame", "aprovado")
+
+tb_final <- df1 %>%
+  mutate_at(vars(matches("prova")),
+            ~replace_na(., 0)) %>%
+  mutate(media = (prova1 + prova2 + prova3)/3,
+         result= cut(media,
+                     breaks = inter,
+                     labels = condi,
+                     right = FALSE,
+                     include.lowest = TRUE))
+
+tb_final %>%
+  select(nome, curso,
+         media, result)
+
+```
+
+### Substituição de valores ausentes
+
+```{r}
+df1 %>%
+  mutate_at(vars(matches("prova")),
+            ~replace_na(., 0)) %>%
+  mutate(faltas =
+           replace_na(faltas, 0)) %>%
+  select(prova1:prova3, faltas)
+```
+
+```{r}
+df1 %>%
+  replace_na(replace =
+               list(prova1 = 0,
+                    prova2 = 0,
+                    prova3 = 0,
+                    faltas = 60)) %>%
+  select(prova1:prova3, faltas)
+```
+
+
+## Medidas resumo
+
+Existem diversas operações para determinar estatísticas descritivas: soma, média, mediana, quartis, quantis, variância, desvio-padrão, amplitude, desvio absoluto da mediana, coeficiente de variação, etc. Podemos ainda obter número de níveis distintos, frequências
+absolutas/relativas, etc. As medidas podem ainda ser marginais ou considerar a estratificação conforme uma ou mais variáveis categóricas. São diversas opções e usando o `dplyr` este tipo de análise é facilmente feita.
+
+### Uma estatística
+
+```{r}
+# Medidas resumo de uma estatística.
+df1 %>%
+  summarise(sum(prova1),
+            mean(prova1),
+            max(prova1),
+            min(prova1),
+            median(prova1),
+            sd(prova1),
+            var(prova1),
+            length(prova1)) %>%
+  t()
+```
+
+### Um vetor de estatísticas
+
+```{r}
+# Medidas resumo de um vetor de estatísticas.
+quantile(df1$prova1, probs = c(0.25, 0.75))
+```
+
+### Estatísticas definidas pelo usuário
+
+```{r}
+df1 %>%
+  summarise(CV = 100 *
+              sd(prova1)/mean(prova1))
+
+# Define uma função para facilitar.
+CV <- function(x, ...) {
+  100 * sd(x, ...)/mean(x, ...)
+}
+df1 %>%
+  summarise_if(.predicate = is.numeric,
+               .funs = CV,
+               na.rm = TRUE)
+```
+
+### Várias estatísticas para várias variáveis
+
+```{r}
+df1 %>%
+  summarise_at(vars(prova1:prova3, faltas),
+               .funs = c("mean",
+                         "sd",
+                         "CV"),
+               na.rm = TRUE) %>%
+  glimpse()
+```
+
+
+## Agregação
+
+As tarefas de agregação consistem em aplicar estatísticas em variáveis fazendo a estratificação por outras variáveis. Estas tarefas são conhecidas como split-apply-combine ou também chamadas de GROUP BY.
+
+### Cálculo de frequências
+
+```{r}
+# Registros por curso.
+df1 %>%
+  count(curso)
+
+# Média final por curso.
+df1 %>%
+  mutate_at(vars(prova1:prova3),
+            ~replace_na(., 0)) %>%
+  mutate(media = (prova1 + prova2 +
+                    prova3)/3,
+         condic = ifelse(media >= 70,
+                         "Aprov",
+                         "Reprov")) %>%
+  count(curso, condic)
+```
+
+### Medidas descritivas resumo
+
+```{r}
+# Nota média por curso em cada avaliação.
+df1 %>%
+  group_by(curso) %>%
+  summarise_at(vars(prova1:prova3),
+               "mean",
+               na.rm = TRUE)
+
+# Média final por curso.
+df1 %>%
+  mutate_at(vars(prova1:prova3),
+            ~replace_na(., 0)) %>%
+  mutate(media = (prova1 + prova2 +
+                    prova3)/3) %>%
+  group_by(curso) %>%
+  summarise_at("media",
+               c("mean", "sd",
+                 "min", "max"),
+               na.rm = TRUE)
+```
+
+Uma vez que uma tabela é agrupada, várias informações e métodos estão disponíveis. Isso permite criar uma lista de tabelas para operar com programação funcional.
+
+```{r}
+# Criar uma tabela de dados agrupados.
+u <- df1 %>%
+  group_by(curso)
+# Inspeciona os métodos disponíveis.
+class(u)
+methods(class = "grouped_df")
+# Usa alguns dos métodos.
+n_groups(u)
+group_vars(u)
+group_size(u)
+group_indices(u)
+# Cria uma lista de tabelas.
+u <- df1 %>%
+  group_split(curso)
+# str(u, vec.len = 2,
+#max.level = 2, give.attr = FALSE)
+glimpse(u)
+
+```
+
+
+## Concatenação
+
+A concatenação permite adicionar novas observações a uma tabela ou novas variáveis seja por linha ou colunas.
+
+### Concatenação de linhas (vertical)
+
+```{r}
+# Concatenação na vertical
+bind_rows(df1[1:3, c(1, 3,5)],
+          df1[5:7, c(1, 3,5, 4)],
+          df1[4, c(1,5, 4)])
+
+```
+
+### Concatenação de colunas (horizontal)
+
+```{r}
+# Concatenação na horizontal (fila).
+bind_cols(df1[, c(1:3)],
+          df1[, c(6:7)])
+```
+
+## Junções
+
+Junções permitem parear dados de tabelas separadas quando elas possuem
+uma chave (ou chave primária). As operações de junção podem ser
+inicialmente de 4 tipos: por interseção (inner join), por união (full join), junção à esquerda (left join), junção à direita (right join) e também existem os exclusive joins.
+
+```{r}
+# Full join = união.
+full_join(df1, df_extra,
+          by = c("matricula" = "mat",
+                 "nome"))
+
+# Inner join = intersecção.
+inner_join(df1,
+           df_extra,
+           by = c("matricula" = "mat",
+                  "nome"))
+
+# Todos os que estão na 1º tabela
+left_join(df1, df_extra,
+          by = c("matricula" = "mat",
+                 "nome"))
+
+# Todos os que estão na 2º tabela
+right_join(df1, df_extra,
+           by = c("matricula" = "mat",
+                  "nome"))
+
+# Os da 2º que não aparecem na 1º.
+anti_join(df1, df_extra,
+          by = c("matricula" = "mat",
+                 "nome"))
+
+
+```
+
+
+## Rearranjo
+
+As operações de rearranjo são aquelas de reshaping da tabela, ou seja, servem para modificar a disposição dos registros.
+
+### Rearranjo · Empilhar
+
+```{r}
+u <- df1 %>%
+  pivot_longer(names_to = "exame",
+               values_to = "nota",
+               prova1:prova3)
+head(u) %>%
+  select(nome, curso, exame, nota)
+```
+
+### Rearranjo · Desempilhar
+
+```{r}
+v <- u %>%
+  pivot_wider(names_from = "exame",
+              values_from = "nota")
+head(v)
+```
+
+---
