@@ -1,0 +1,222 @@
+---
+title: 'Módulo 3'
+
+output:
+  html_document:                    
+    toc: true                       
+    #toc_depth: 3                    
+    #toc_float:                      
+    #  collapsed: true
+    # smooth_scroll: true
+    number_sections: true           
+    #theme: flatly
+    #spacelab
+    #default,cerulean,journal,flatly,readable,spacelab,
+    #united,cosmo,lumen,paper,sandstone,simplex,yeti
+    
+    #highlight: espresso
+    #default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, and textmate
+    #css: styles.css                
+    #fig_width: 7                    
+    #fig_height: 6                   
+    #fig_caption: true               
+    #fig_align: 'center'
+    #code_folding: hide              
+#    keep_md: true     
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+
+# Visualização de dados com {ggplot2}
+
+Uma boa visualização pode ser usada para fins de exploração de forma rápida, reconhecimento de padrões, estruturas e relações entre variáveis. O uso de técnicas de visualização é frequente também para avaliação de suposições de modelos estatísticos e na comunicação de resultados.
+
+Quando o assunto é visualização de dados usando R, precisamos mencionar três bibliotecas importantes: `graphics`, `lattice` e `ggplot2`. O `graphics` é um pacote básico e mais primitivo para visualização em R; é muito útil porém limitado para algumas tarefas. O `lattice` foi uma das primeiras bibliotecas especializadas em gráficos que surgiu como alternativa ao `graphics`; tamanho foi seu sucesso que hoje faz parte do grupo de pacotes recomendados do R, ou seja, ao instalar o R, o `lattice` será instalado automaticamente. Já o `ggplot2` é uma alternativa mais moderna; sua sintaxe é baseada na chamada Gramática dos Gráficos em que usam-se camadas para a inclusão de elementos gráficos.
+
+Outro tópico interessante é a visualização interativa. Tratam-se de gráficos que apresentam recursos extra ao usuário como alguma reação quando o cursor do mouse passa por pontos, opções de filtragem, zoom em áreas específicas, etc. Em geral, este tipo de visualização é usada para relatórios a serem disponibilizados na web. Alguns dos pacotes para visualização interativa são: `plotly`, `highcharter`, `googleVis`, `rCharts`, `leaflet`, `iplots`, `rgl` e `animation`. Para verificar possibilidades de gráficos que podem ser gerados em R recomendamos o [R Graph Gallery](https://www.r-graph-gallery.com/).
+
+---
+
+## Um overview do {ggplot2}
+
+O ggplot2 é a implementação computacional em R das ideias do livro "The Grammar of Graphics" de Leland Wilkinson. A ideia é que visualizações podem ser desenvolvidas por meio de camadas. As camadas usadas são:
+
+ - Dados: onde define-se o tipo de valor e dimensões de escala.
+ - Variáveis visuais: define o mapeamento em variáveis visuais e controle das escalas.
+ - Geometrias: qual(is) representações geométricas serão usadas.
+ - Facetas: de que forma a visualização será dividida para exibição.
+ - Estatísticas: elementos de estatística ou valores calculados a serem exibidos.
+ - Coordenadas: sistema de coordenadas a ser usado.
+ - Tema: cores, demarcações, fontes, legendas, etc.
+ 
+A função central do pacote é a `ggplot()`, dentro dessa função declaramos o conjunto de dados, as variáveis que queremos representar e de que forma. A partir daí começa a declaração dos elementos gráficos por meio do esquema de camadas. Para ajuda acesse o [cartão de referência de visualização de dados com o {ggplot2}](https://raw.githubusercontent.com/rstudio/cheatsheets/master/data-visualization-2.1.pdf). 
+
+Vejamos com um pouco mais de detalhes as camadas do ggplot2 fazendo uso de um conjunto de dados que contém características de jogadores de futebol.
+
+```{r, message=FALSE}
+library(tidyverse)
+
+# Caminho para o arquivo na WEB.
+url <- "http://leg.ufpr.br/~walmes/data/euro_football_players.txt"
+
+# Leitura com `readr`.
+tb <- read_tsv(file = url,
+               col_names = TRUE,
+               quote = "",
+               comment = "#")
+
+tb <- tb %>%
+    mutate(position = str_replace(pos, "^([A-Z]+).*", "\\1"))
+
+
+```
+
+---
+
+## Camada 1: dados
+
+Para esta camada devemos nos atentar ao tipo de valor/objeto. Em nosso conjunto de dados, uma variável de interesse pode ser:
+
+ - Quantitativa: variável numérica discreta ou contínua.
+ - Qualitativa: variável categórica nominal ou ordinal.
+ - Cronológica: variável de data ou data-tempo.
+ - Geográfica: objetos como polígonos, por exemplo.
+
+Na função `ggplot()` basta utilizar o argumento `data` para declarar o conjunto de dados armazenado em um `data.frame`.
+
+```{r, eval=FALSE}
+ggplot(data = tb)
+```
+
+---
+
+## Camada 2: mapeamento em variáveis visuais
+
+Nesta etapa devemos declarar quais variáveis temos interesse em representar e de que forma: haverá uma variável no eixo x? Uma no eixo y? Usaremos tamanhos distintos para níveis de um determinado fator? Ou cores? Ou formas? 
+
+Para declarar estas características utilizamos na função `ggplot()` o argumento mapping e, dentro deste argumento, a função `aes()` possui os argumentos: x, y, size, shape, linetype, color, fill e alpha. Utilizando estes argumentos podemos passar variáveis e depois desse mapeamento decidir que forma usaremos para representar estes dados. Com nosso conjunto de dados, alguns exemplos são:
+
+```{r, eval=FALSE}
+ggplot(data = tb,
+       mapping = aes(x = position))
+
+ggplot(data = tb,
+       mapping = aes(x = cm,
+                     y = kg,
+                     color = position))
+
+ggplot(data = tb,
+       mapping = aes(x = cm,
+                     y = kg,
+                     color = age,
+                     size = age
+                     ))
+```
+
+
+É importante notar que nestas etapas ainda não temos como um output um gráfico, ainda estamos na etapa de declaração de dados e variáveis. Começamos a ter saídas quando definimos o que fazer com a próxima camada: geometrias.
+
+---
+
+## Camada 3: geometrias
+
+Neste ponto, já com os dados e variáveis devidamente declaradas, devemos decidir de que forma representar os dados. O pacote `ggplot2` possui uma lista considerável de geometrias disponíveis por meio de funções que complementam as informações que declaramos anteriormente. Todas as funções de geometria contam com o prefixo "geom_" os mais usados são `geom_bar()`, `geom_boxplot()`, `geom_density()`, `geom_histogram()` e `geom_point()`, usados para as representações gráficas mais convencionais. Alguns exemplos utilizando nosso conjunto de dados:
+
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = position)) +
+    geom_bar()
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm)) +
+    geom_boxplot()
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm)) +
+    geom_density()
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm)) +
+    geom_histogram()
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm,
+                     y = kg,
+                     color = position)) +
+    geom_point()
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = country,
+                     y = cm)) +
+    geom_boxplot()
+```
+
+---
+
+## Camada 4: divisão em facetas
+
+Em algumas situações podemos estar interessados em dividir nossa representação para níveis de uma variável. Nestes casos utilizamos a divisão em facetas. Para esta tarefa o ggplot2 possui as funções `facet_grid()`, `facet_null()` e `facet_wrap()`.
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm,
+                     y = kg)) +
+  geom_point() + facet_wrap(~position)
+```
+
+```{r}
+ggplot(data = tb,
+       mapping = aes(x = cm)) +
+    facet_grid(facets = position ~ .) +
+    geom_density(fill = "orange")
+```
+
+---
+
+## Camada 5: estatística
+
+---
+
+## Camada 6: coordenadas
+
+---
+
+## Camada 7: tema
+
+---
+
+# Considerações finais
+
+A análise exploratória de dados está presente em todos os projetos de ciência de dados.
+
+Ela serve para tirar impressões iniciais dos dados como a distribuição das variáveis, a relação entre elas, problemas com valores atípicos, etc.
+
+Uma boa análise exploratória subsidia o levantamento de hipóteses, as decisões de negócio, a engenharia de características e a construção e validação de modelos.
+
+Dominar ferramentas para uma análise exploratória ágil é importante para celeridade dos projetos e ganho de conhecimento.
+
+O R é extraordinário em termos de visualização com vários pacotes e frameworks para visualização de dados.
+
+Dispõe ainda de inúmeros recursos para a visualização interativa.
+
+ggplot é altamente customizável e é realmente muito difícil lembrar de todas as funcionalidades, mas a documentação e os materiais web estão aí para serem consultados e o que realmente importa é o modelo mental. Tendo o objetivo claro em mente, muito provavelmente existe uma forma de criar esta saída no ggplot desde que faça sentido.
+
+MOSTRAR UM GRÁFICO COM ALTO NIVEL DE CUSTOMIZAÇÃO
+
+---
